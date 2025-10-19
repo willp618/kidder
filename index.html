@@ -177,6 +177,7 @@
 
   function applyColor(chosenColor) {
     document.body.style.color = chosenColor;
+
     function darkenColor(hex, factor = 0.2) {
       let r = parseInt(hex.substr(1, 2), 16);
       let g = parseInt(hex.substr(3, 2), 16);
@@ -186,12 +187,15 @@
       b = Math.floor(b * factor);
       return `rgb(${r}, ${g}, ${b})`;
     }
+
     const darkerBg = darkenColor(chosenColor, 0.2);
+
     document.querySelectorAll('.iframe-wrapper').forEach(wrapper => {
       wrapper.style.borderColor = chosenColor;
       wrapper.style.boxShadow = `0 4px 8px ${chosenColor}80`;
       wrapper.style.backgroundColor = darkerBg;
     });
+
     document.querySelectorAll('.toggle-box').forEach(box => {
       box.style.borderColor = chosenColor;
       box.style.boxShadow = `0 4px 8px ${chosenColor}80`;
@@ -202,7 +206,7 @@
 
   if (savedColor) applyColor(savedColor);
 
-  // Reset color to default
+  // --- Reset color to default ---
   const resetButton = document.getElementById('reset-color');
   if (resetButton) {
     resetButton.addEventListener('click', () => {
@@ -212,29 +216,6 @@
     });
   }
 </script>
-</body>
-</html>
-      wrapper.style.backgroundColor = darkerBg;
-    });
-    document.querySelectorAll('.toggle-box').forEach(box => {
-      box.style.borderColor = chosenColor;
-      box.style.boxShadow = `0 4px 8px ${chosenColor}80`;
-      box.style.backgroundColor = darkerBg;
-      box.style.color = chosenColor;
-    });
-  }
 
-  if (savedColor) applyColor(savedColor);
-
-  // Reset color to default
-  const resetButton = document.getElementById('reset-color');
-  if (resetButton) {
-    resetButton.addEventListener('click', () => {
-      const defaultColor = '#FFAA33';
-      applyColor(defaultColor);
-      localStorage.removeItem(localStorageKey);
-    });
-  }
-</script>
 </body>
 </html>
