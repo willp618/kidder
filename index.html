@@ -5,81 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DX MESH - Live Feed (iOS)</title>
 <style>
-  body {
-    background-color: black;
-    color: #FFAA33;
-    font-family: 'Courier New', monospace;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
-  }
-  h1 { margin: 20px 0; font-size: 2em; }
-  h2 { margin: 10px 0; font-size: 1.2em; }
-  h3 { margin: 5px 0; }
-
-  .container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 10px 0;
-  }
-
-  .iframe-wrapper {
-    text-align: center;
-    margin: 15px 5px;
-    border: 2px solid #FFAA33;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #331a00;
-    box-shadow: 0 4px 8px rgba(255,170,51,0.5);
-    width: 95%; /* iOS-friendly full width */
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .iframe-wrapper p {
-    margin: 5px 5px 0;
-    font-weight: bold;
-    font-size: 1em;
-    text-align: center;
-  }
-
-  iframe {
-    border: none;
-    width: 100%;
-    height: 300px; /* default height, adjustable below */
-  }
-
-  .hide-button,
-  .reset-button {
-    margin: 10px 0 15px 0;
-    padding: 5px 10px;
-    background-color: #ff0000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: 'Courier New', monospace;
-    font-size: 1em;
-    box-shadow: 0 4px 8px rgba(255,0,0,0.5);
-  }
-  .hide-button:hover,
-  .reset-button:hover { background-color: #cc0000; }
+body {
+  background-color: black;
+  color: #FFAA33;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+h1 { margin: 20px 0; font-size: 2.5em; }
+h2 { margin: 10px 0; font-size: 1.5em; }
+h3 { margin: 5px 0; }
+.iframe-wrapper {
+  text-align: center;
+  margin: 15px 5px;
+  border: 2px solid #FFAA33;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #331a00;
+  width: 95%; /* iOS-friendly width */
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.iframe-wrapper p {
+  margin: 5px 5px 0;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+iframe {
+  border: none;
+  width: 100%;
+  height: 300px;
+}
+.hide-button {
+  margin: 5px 0 10px 0;
+  padding: 5px 10px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.hide-button:hover { background-color: #cc0000; }
+.iframe-height-control { margin: 20px; font-size: 1.2em; color: #FFAA33; }
 </style>
 </head>
 <body>
-<h1>DX MEGA MESH (iOS)</h1>
-<h2>Liam Cottle – Live Feed</h2>
 
-<div class="container">
-  <div class="iframe-height-control" style="width:95%; max-width:400px; margin:10px auto;">
-    <label for="iframe-height" style="color:#FFAA33;">Adjust Message Box Height: </label>
-    <input type="range" id="iframe-height" min="100" max="500" value="300">
-    <span id="iframe-height-value">300px</span>
-  </div>
+<h1>THE DX MEGA MESH</h1>
+<h2>Liam Cottle – Live Feed</h2>
+<h3>Created by SubnetConflict.</h3>
+<h3>Nicked by KD.</h3>
+
+<h3 style="background-color:#B22222; color:#FFB347; display:inline-block; padding:5px 10px; border-radius:5px;">
+⚠️ Please Consider Consulting Your Local Mesh Group And Fully Read The Meshtastic Role Guidance Before Selecting The Router Role ⚠️
+</h3>
+<h3>For Best Viewing On Smaller Landscape Screens Please Zoom Out Your Browser to 80%</h3>
+
+<div style="margin: 20px auto; width: 90%; max-width: 800px; text-align: center;">
+  <a href="https://willp618.github.io/westmidshelpfullinks">
+    <button class="hide-button" style="background-color:#FFAA33; color:black;">Home</button>
+  </a>
+  <p style="color:#FFAA33; margin-top:5px;"><em>Edited: 14/10/25</em></p>
+</div>
+
+<div class="iframe-height-control">
+  <label for="iframe-height">Adjust Message Box Height: </label>
+  <input type="range" id="iframe-height" min="100" max="500" value="300">
+  <span id="iframe-height-value">300px</span>
 </div>
 
 <div class="container" id="iframe-container">
@@ -91,14 +86,32 @@
   // Load all nodes dynamically
   loadDxMeshIframes('iframe-container');
 
-  // iOS-specific iframe height adjustment
+  // Lazy-load iframes using IntersectionObserver
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const iframe = entry.target;
+        if (!iframe.src && iframe.dataset.src) iframe.src = iframe.dataset.src;
+        observer.unobserve(iframe);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('#iframe-container iframe').forEach(iframe => {
+    // Assign data-src for lazy loading
+    iframe.dataset.src = iframe.src;
+    iframe.src = '';
+    observer.observe(iframe);
+  });
+
+  // Iframe height control
   const iframeHeightSlider = document.getElementById('iframe-height');
   const iframeHeightValue = document.getElementById('iframe-height-value');
 
   iframeHeightSlider.addEventListener('input', function () {
     const height = iframeHeightSlider.value;
     iframeHeightValue.textContent = height + 'px';
-    document.querySelectorAll('iframe').forEach(iframe => {
+    document.querySelectorAll('#iframe-container iframe').forEach(iframe => {
       iframe.style.height = height + 'px';
     });
   });
