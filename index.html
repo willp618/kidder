@@ -26,6 +26,10 @@
   }
 
   .iframe-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
     text-align: center;
     margin: 15px 5px;
     border: 2px solid #FFAA33;
@@ -34,10 +38,7 @@
     background-color: #331a00;
     box-shadow: 0 4px 8px rgba(255, 170, 51, 0.5);
     width: 350px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+    min-height: 400px; /* ensures all wrappers have equal height */
   }
 
   .iframe-wrapper p {
@@ -45,6 +46,7 @@
     font-weight: bold;
     font-size: 1.2em;
     text-align: center;
+    min-height: 2.4em; /* aligns buttons */
   }
 
   iframe {
@@ -216,6 +218,6 @@
     });
   }
 </script>
-
 </body>
 </html>
+
