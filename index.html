@@ -3,125 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crimson iOS (MQTT)</title>
+<title>DX MESH - Live Feed (iOS)</title>
 <style>
   body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #111;
-    color: #eee;
-  }
-  h1 {
+    background-color: black;
+    color: #FFAA33;
+    font-family: 'Courier New', monospace;
     text-align: center;
-    padding: 0.5rem;
-    background: #222;
     margin: 0;
-    font-size: 1.2rem;
+    padding: 20px;
   }
-  .nodes-container {
+  h1 { margin: 20px 0; font-size: 2em; }
+  h2 { margin: 10px 0; font-size: 1.2em; }
+  h3 { margin: 5px 0; }
+
+  .container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    padding: 0.5rem;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 10px 0;
   }
-  .node-card {
-    background: #222;
-    border: 1px solid #555;
+
+  .iframe-wrapper {
+    text-align: center;
+    margin: 15px 5px;
+    border: 2px solid #FFAA33;
     border-radius: 8px;
-    width: 300px;
-    height: 220px;
+    overflow: hidden;
+    background-color: #331a00;
+    box-shadow: 0 4px 8px rgba(255,170,51,0.5);
+    width: 95%; /* iOS-friendly full width */
+    max-width: 400px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    align-items: center;
+    justify-content: space-between;
   }
-  .node-header {
-    background: #333;
-    padding: 0.25rem 0.5rem;
+
+  .iframe-wrapper p {
+    margin: 5px 5px 0;
     font-weight: bold;
+    font-size: 1em;
     text-align: center;
-    font-size: 0.95rem;
-    border-bottom: 1px solid #555;
   }
-  .messages {
-    flex: 1;
-    padding: 0.25rem 0.5rem;
-    overflow-y: auto;
-    font-size: 0.85rem;
+
+  iframe {
+    border: none;
+    width: 100%;
+    height: 300px; /* default height, adjustable below */
   }
-  .message {
-    margin-bottom: 0.2rem;
-    border-bottom: 1px solid #444;
-    padding-bottom: 0.1rem;
+
+  .hide-button,
+  .reset-button {
+    margin: 10px 0 15px 0;
+    padding: 5px 10px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    box-shadow: 0 4px 8px rgba(255,0,0,0.5);
   }
-  .timestamp {
-    font-size: 0.7rem;
-    color: #999;
-    margin-left: 0.25rem;
-  }
+  .hide-button:hover,
+  .reset-button:hover { background-color: #cc0000; }
 </style>
 </head>
 <body>
+<h1>DX MEGA MESH (iOS)</h1>
+<h2>Liam Cottle – Live Feed</h2>
 
-<h1>Crimson iOS - Live Nodes</h1>
-<div class="nodes-container" id="nodes-container"></div>
+<div class="container">
+  <div class="iframe-height-control" style="width:95%; max-width:400px; margin:10px auto;">
+    <label for="iframe-height" style="color:#FFAA33;">Adjust Message Box Height: </label>
+    <input type="range" id="iframe-height" min="100" max="500" value="300">
+    <span id="iframe-height-value">300px</span>
+  </div>
+</div>
 
-<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<div class="container" id="iframe-container">
+  <p style="color:#FFAA33;">Loading live nodes…</p>
+</div>
+
+<script src="iframes-data.js"></script>
 <script>
-const MAX_MESSAGES_PER_NODE = 25;
-const container = document.getElementById('nodes-container');
-const nodes = {}; // Stores card and messages per node
+  // Load all nodes dynamically
+  loadDxMeshIframes('iframe-container');
 
-// Connect to MQTT WebSocket
-const client = mqtt.connect('wss://meshtastic.sytes.net:1883', {
-  username: 'mesh1', // optional
-  password: 'mesh12345'  // optional
-});
+  // iOS-specific iframe height adjustment
+  const iframeHeightSlider = document.getElementById('iframe-height');
+  const iframeHeightValue = document.getElementById('iframe-height-value');
 
-client.on('connect', () => {
-  console.log('Connected to MQTT');
-  client.subscribe('meshtastic/+/text', err => {
-    if (err) console.error('Subscription error:', err);
+  iframeHeightSlider.addEventListener('input', function () {
+    const height = iframeHeightSlider.value;
+    iframeHeightValue.textContent = height + 'px';
+    document.querySelectorAll('iframe').forEach(iframe => {
+      iframe.style.height = height + 'px';
+    });
   });
-});
-
-client.on('message', (topic, message) => {
-  const msgText = message.toString();
-  const nodeId = topic.split('/')[1];
-  const timestamp = new Date().toLocaleTimeString();
-
-  if (!nodes[nodeId]) {
-    const card = document.createElement('div');
-    card.classList.add('node-card');
-    card.innerHTML = `<div class="node-header">${nodeId}</div><div class="messages"></div>`;
-    container.appendChild(card);
-    nodes[nodeId] = { card, messages: [] };
-  }
-
-  const node = nodes[nodeId];
-  node.messages.push({ text: msgText, timestamp });
-
-  if (node.messages.length > MAX_MESSAGES_PER_NODE) {
-    node.messages.shift();
-  }
-
-  const messagesDiv = node.card.querySelector('.messages');
-  messagesDiv.innerHTML = '';
-  node.messages.forEach(m => {
-    const div = document.createElement('div');
-    div.classList.add('message');
-    div.innerHTML = `${m.text} <span class="timestamp">${m.timestamp}</span>`;
-    messagesDiv.appendChild(div);
-  });
-
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
-
-client.on('error', err => {
-  console.error('MQTT error:', err);
-  container.innerHTML = '<p style="color:red;text-align:center;">Error connecting to MQTT server.</p>';
-});
 </script>
-
 </body>
 </html>
