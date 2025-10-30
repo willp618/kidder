@@ -351,8 +351,8 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// === SIMPLE SNOW EFFECT (iOS-Optimized) ===
-let snowActive = false;
+// === SIMPLE SNOW EFFECT (iOS-Optimized, ON BY DEFAULT) ===
+let snowActive = true;
 let snowCanvas, ctx, snowflakes = [];
 let animationFrameId = null;
 const maxFlakesDesktop = 100;
@@ -365,6 +365,7 @@ function isMobileDevice() {
 }
 
 function initSnow() {
+  if (snowCanvas) return;
   snowCanvas = document.createElement('canvas');
   snowCanvas.id = 'snow-canvas';
   document.body.appendChild(snowCanvas);
@@ -388,6 +389,7 @@ function initSnow() {
     else if (snowActive) animateSnow();
   });
 
+  snowCanvas.style.display = 'block';
   animateSnow();
 }
 
@@ -434,6 +436,11 @@ function stopSnow() {
   if (animationFrameId) cancelAnimationFrame(animationFrameId);
   animationFrameId = null;
 }
+
+// Start snow automatically
+window.addEventListener('DOMContentLoaded', () => {
+  initSnow();
+});
 
 document.getElementById('toggle-snow').addEventListener('click', () => {
   snowActive = !snowActive;
