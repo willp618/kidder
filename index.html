@@ -83,17 +83,6 @@
 
     button {
         cursor: pointer;
-        background: none;
-        border: 1px solid #FFAA33;
-        color: #FFAA33;
-        padding: 5px 10px;
-        border-radius: 4px;
-        transition: 0.3s;
-    }
-
-    button:hover {
-        background: #FFAA33;
-        color: black;
     }
 
     #warning-line {
@@ -232,12 +221,13 @@
 </ul>
 
 <header>
-    <h1>HELPFUL LINKS</h1>
+    <h1>🎄️HELPFUL LINKS🎄️</h1>
     <h3>FOR THE WEST MIDS MESH</h3>
 </header>
 
 <main>
     <section>
+        <h1>🎅️🎄️ MERRY CHRISTMAS FROM KD1 🎄️🎅️</h1>
         <h2>Important Information</h2>
         <p>If you have more than one node, please designate one as your relay to the wider mesh — usually a roof, loft, or window node. 
         This node should be <strong>CLIENT OR CLIENT_BASE</strong>. Other nodes should be <strong>CLIENT MUTE</strong>.</p>
@@ -251,40 +241,40 @@
         <h2>Helpful Links</h2>
         <ul>
             <li>💬 Join the Mesh Hub Midlands Discord — 
-                <a href="https://discord.gg/98b377tCBC" target="_blank" rel="noopener noreferrer">https://discord.gg/98b377tCBC</a>
+                <a href="https://discord.gg/98b377tCBC" target="_blank">https://discord.gg/98b377tCBC</a>
             </li>
             <li>💬 The much better Mesh Hub Midlands Website — 
-                <a href="https://www.meshhubmids.com/index.html" target="_blank" rel="noopener noreferrer">www.meshhubmids.com</a>
+                <a href="https://www.meshhubmids.com/index.html" target="_blank">www.meshhubmids.com</a>
             </li>
-            <li>📡 DX node message viewer (IOS-compatible) — 
-                <a href="./crimson-margeaux-37/" target="_blank" rel="noopener noreferrer">crimson-margeaux-37</a>
+            <li>📡 DX node message viewer — 
+                <a href="./crimson-margeaux-37/" target="_blank">crimson-margeaux-37</a>
             </li>
-            <li>📡 DX node viewer for IOS — 
-                <a href="./crimsonforios/" target="_blank" rel="noopener noreferrer">crimson-margeaux-37-FOR IOS</a>
+            <li>📡 DX node message viewer FOR IOS — 
+                <a href="./crimsonforios/" target="_blank">crimson-margeaux-37-FOR IOS</a>
             </li>
             <li>🚦 Road works map — 
-                <a href="https://one.network" target="_blank" rel="noopener noreferrer">traffic lights</a>
+                <a href="https://one.network" target="_blank">traffic lights</a>
             </li>
             <li>📖 Official Meshtastic Docs — 
-                <a href="https://meshtastic.org/docs/introduction" target="_blank" rel="noopener noreferrer">meshtastic.org/docs</a>
+                <a href="https://meshtastic.org/docs/introduction" target="_blank">meshtastic.org/docs</a>
             </li>
             <li>🗺 Liam Cottle's Map — 
-                <a href="https://meshtastic.liamcottle.net" target="_blank" rel="noopener noreferrer">meshtastic.liamcottle.net</a>
+                <a href="https://meshtastic.liamcottle.net" target="_blank">meshtastic.liamcottle.net</a>
             </li>
             <li>🌐 MeshSense Map — 
-                <a href="https://meshsense.affirmatech.com" target="_blank" rel="noopener noreferrer">meshsense.affirmatech.com</a>
+                <a href="https://meshsense.affirmatech.com" target="_blank">meshsense.affirmatech.com</a>
             </li>
             <li>🛰 Mesh Map — 
-                <a href="https://meshmap.net" target="_blank" rel="noopener noreferrer">meshmap.net</a>
+                <a href="https://meshmap.net" target="_blank">meshmap.net</a>
             </li>
             <li>📍 Meshtastic Site Planner — 
-                <a href="https://site.meshtastic.org" target="_blank" rel="noopener noreferrer">site.meshtastic.org</a>
+                <a href="https://site.meshtastic.org" target="_blank">site.meshtastic.org</a>
             </li>
             <li>🌄 Heywhatsthat WISP Demo — 
-                <a href="https://wisp.heywhatsthat.com" target="_blank" rel="noopener noreferrer">wisp.heywhatsthat.com</a>
+                <a href="https://wisp.heywhatsthat.com" target="_blank">wisp.heywhatsthat.com</a>
             </li>
             <li>🏙 Why Not Visit Kidderminster — 
-                <a href="./kidderminster/" target="_blank" rel="noopener noreferrer">westmidshelpfullinks/kidderminster/</a>
+                <a href="./kidderminster/" target="_blank">westmidshelpfullinks/kidderminster/</a>
             </li>
         </ul>
     </section>
@@ -293,12 +283,12 @@
 <div class="controls">
     <label>Choose Text Color: <input type="color" id="font-color" value="#FFAA33"></label>
     <button id="reset-color" style="margin-left:10px;">Reset</button>
-    <button id="toggle-snow" style="margin-left:10px;">Toggle Snow ❄️</button>
+    <button id="toggle-snow" style="margin-left:10px; background-color:#ff0000; color:white; border:none; border-radius:5px; padding:5px 10px; box-shadow:0 4px 8px rgba(255,0,0,0.5); cursor:pointer;">Toggle Snow ❄️</button>
 </div>
 
 <footer>
     <p>Last updated 19/10/25</p>
-    <p>Work in progress</p>
+    <p>work in progess</p>
 </footer>
 
 <script>
@@ -335,125 +325,48 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  let savedColor = null;
-  try { savedColor = localStorage.getItem(colorKey); } catch(e){}
-  applyColor(savedColor || defaultColor);
+  const savedColor = localStorage.getItem(colorKey) || defaultColor;
+  applyColor(savedColor);
+  colorPicker.value = savedColor;
 
   colorPicker.addEventListener('input', () => {
     const color = colorPicker.value;
     applyColor(color);
-    try { localStorage.setItem(colorKey, color); } catch(e){}
+    localStorage.setItem(colorKey, color);
   });
 
   resetButton.addEventListener('click', () => {
     applyColor(defaultColor);
-    try { localStorage.removeItem(colorKey); } catch(e){}
-  });
-});
-
-// === SIMPLE SNOW EFFECT (iOS-Optimized, ON BY DEFAULT) ===
-let snowActive = true;
-let snowCanvas, ctx, snowflakes = [];
-let animationFrameId = null;
-const maxFlakesDesktop = 100;
-const maxFlakesMobile = 50;
-const frameInterval = 1000 / 30;
-let lastFrameTime = 0;
-
-function isMobileDevice() {
-  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-}
-
-function initSnow() {
-  if (snowCanvas) return;
-  snowCanvas = document.createElement('canvas');
-  snowCanvas.id = 'snow-canvas';
-  document.body.appendChild(snowCanvas);
-  ctx = snowCanvas.getContext('2d');
-  resizeSnow();
-  window.addEventListener('resize', resizeSnow);
-
-  const maxFlakes = isMobileDevice() ? maxFlakesMobile : maxFlakesDesktop;
-  for (let i = 0; i < maxFlakes; i++) {
-    snowflakes.push({
-      x: Math.random() * snowCanvas.width,
-      y: Math.random() * snowCanvas.height,
-      r: Math.random() * 2 + 1,
-      d: Math.random() * 0.6 + 0.3,
-      drift: Math.random() * 1 - 0.5
-    });
-  }
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) stopSnow();
-    else if (snowActive) animateSnow();
+    localStorage.removeItem(colorKey);
   });
 
-  snowCanvas.style.display = 'block';
-  animateSnow();
-}
-
-function resizeSnow() {
-  if (!snowCanvas) return;
-  snowCanvas.width = window.innerWidth;
-  snowCanvas.height = window.innerHeight;
-}
-
-function animateSnow(timestamp) {
-  if (!snowActive) return;
-  if (timestamp - lastFrameTime < frameInterval) {
-    animationFrameId = requestAnimationFrame(animateSnow);
-    return;
-  }
-  lastFrameTime = timestamp;
-
-  ctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
-  ctx.fillStyle = "rgba(255,255,255,0.85)";
-  ctx.beginPath();
-
-  for (const f of snowflakes) {
-    ctx.moveTo(f.x, f.y);
-    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
-  }
-
-  ctx.fill();
-  updateSnow();
-  animationFrameId = requestAnimationFrame(animateSnow);
-}
-
-function updateSnow() {
-  for (const f of snowflakes) {
-    f.y += f.d;
-    f.x += f.drift * 0.5;
-    if (f.y > snowCanvas.height + 5) {
-      f.y = -5;
-      f.x = Math.random() * snowCanvas.width;
+  // === SNOW EFFECT (DX STYLE) ===
+  let snowActive = true, snowCanvas, ctx, snowflakes = [], animationFrameId = null;
+  const maxFlakesDesktop = 100, maxFlakesMobile = 50, frameInterval = 1000/30;
+  let lastFrameTime = 0;
+  function isMobile(){return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);}
+  function initSnow(){
+    if(snowCanvas) return;
+    snowCanvas=document.createElement('canvas');
+    snowCanvas.id='snow-canvas';
+    document.body.appendChild(snowCanvas);
+    ctx=snowCanvas.getContext('2d');
+    resizeSnow();
+    window.addEventListener('resize',resizeSnow);
+    const maxFlakes=isMobile()?maxFlakesMobile:maxFlakesDesktop;
+    for(let i=0;i<maxFlakes;i++){
+      snowflakes.push({x:Math.random()*snowCanvas.width,y:Math.random()*snowCanvas.height,r:Math.random()*2+1,d:Math.random()*0.6+0.3,drift:Math.random()*1-0.5});
     }
-  }
-}
-
-function stopSnow() {
-  if (animationFrameId) cancelAnimationFrame(animationFrameId);
-  animationFrameId = null;
-}
-
-// Start snow automatically
-window.addEventListener('DOMContentLoaded', () => {
-  initSnow();
-});
-
-document.getElementById('toggle-snow').addEventListener('click', () => {
-  snowActive = !snowActive;
-  if (snowActive) {
-    if (!snowCanvas) initSnow();
-    snowCanvas.style.display = 'block';
     animateSnow();
-  } else if (snowCanvas) {
-    snowCanvas.style.display = 'none';
-    stopSnow();
   }
+  function resizeSnow(){if(!snowCanvas)return;snowCanvas.width=window.innerWidth;snowCanvas.height=window.innerHeight;}
+  function animateSnow(timestamp){if(!snowActive)return;if(timestamp-lastFrameTime<frameInterval){animationFrameId=requestAnimationFrame(animateSnow);return;}lastFrameTime=timestamp;ctx.clearRect(0,0,snowCanvas.width,snowCanvas.height);ctx.fillStyle="rgba(255,255,255,0.85)";ctx.beginPath();for(const f of snowflakes){ctx.moveTo(f.x,f.y);ctx.arc(f.x,f.y,f.r,0,Math.PI*2,true);}ctx.fill();updateSnow();animationFrameId=requestAnimationFrame(animateSnow);}
+  function updateSnow(){for(const f of snowflakes){f.y+=f.d;f.x+=f.drift*0.5;if(f.y>snowCanvas.height+5){f.y=-5;f.x=Math.random()*snowCanvas.width;}}}
+  function stopSnow(){if(animationFrameId) cancelAnimationFrame(animationFrameId); animationFrameId=null;}
+  initSnow();
+  document.getElementById('toggle-snow').addEventListener('click',()=>{snowActive=!snowActive;if(snowActive){if(!snowCanvas)initSnow();snowCanvas.style.display='block';animateSnow();}else if(snowCanvas){snowCanvas.style.display='none';stopSnow();}});
 });
 </script>
-
 </body>
-</html>
+                                                                                                                           </html>
+                                                                                                                           
